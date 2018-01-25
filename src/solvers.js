@@ -12,53 +12,60 @@
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-
+var makeEmptyMatrix = function(n) {
+  return _(_.range(n)).map(function() {
+    return _(_.range(n)).map(function() {
+      return 0;
+    });
+  });
+};
 
 
 window.findNRooksSolution = function(n) {
   // make a possible array of all indices using n - for loop
-  // [...Array(n-1).keys()];
   var possibleI = [...Array(n).keys()];
   // make empty matrix
-  var board = new Board({n : n});
-  // keep our indice pairs in object
-  var indexObject = {};
-  // function([array of colIndices], rowIndex (n-1))      {
+  var board = makeEmptyMatrix(n);
   
+  // function([array of colIndices], rowIndex (n-1))      {
   var createBoard = function (arrayOfColIndices, rowsRemaining) {
     // if rows < 0 { 
-
     if (rowsRemaining < 0) {
+      
       //return out of func
       return;
     }
+    
     // for loop (i = 0 ... i < rowIndex){
     for (var i = 0; i < arrayOfColIndices.length; i++) {
-      //in our object of pairs,
-      //set rowIndex as key, and possible[i] as value
-      indexObject[rowsRemaining] = arrayOfColIndices[i];
+      var colIndex = arrayOfColIndices[i];
+      //in our nested array matrix,
+      //find row & column index
+        //set value to 1
+      board[rowsRemaining][colIndex] = 1;
+      
       // function (possible (splice[i]), rows -1);
       var updatedColIndices = arrayOfColIndices.slice();
       updatedColIndices.splice(i, 1);
+      //recurse the function w/ new imputs
       createBoard(updatedColIndices, (rowsRemaining - 1));
+      break;
     }
   };
   
+  
   // run function on (possiblesArray, n -1);
   createBoard(possibleI, n - 1);
-  //   update empty matrix with our indice pairs from object
-  for (var key in indexObject) {
-    //debugger;
-    console.log('our board', JSON.stringify(board));
-    var row = key;
-    var col = indexObject[key];
-    board.attributes[row][col] = 1;
-  }
+
   // return matrix solution
-  // }
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(board));
-  return indexObject;
+  return board;
 };
+
+
+
+
+
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
