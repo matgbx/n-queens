@@ -87,6 +87,8 @@
       }
       return counter > 1;
     },
+    //time complexity: linear
+    
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
@@ -98,6 +100,7 @@
       }
       return false; // fixme
     },
+    //time complexity: quadratic
 
 
 
@@ -114,6 +117,8 @@
       }
       return counter > 1;
     },
+    //time complexity: linear
+    
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
@@ -125,6 +130,7 @@
       }
       return false; // fixme
     },
+    //time complexity: quadratic
 
 
 
@@ -156,6 +162,8 @@
       }
       return counter > 1;
     },
+    //time complexity: linear
+    
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
@@ -167,6 +175,7 @@
       }
       return false;
     },
+    //time complexity: quadratic
 
 
 
@@ -197,6 +206,8 @@
       }
       return counter > 1;
     },
+    //time complexity: linear
+    
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
@@ -209,6 +220,7 @@
       }
       return false;
     }
+    //time complexity: quadratic
 
     /*--------------------  End of Helper Functions  ---------------------*/
 

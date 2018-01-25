@@ -19,12 +19,18 @@ var makeEmptyMatrix = function(n) {
     });
   });
 };
+// time complexity: quadratic
 
+
+//return an array filled with 0s of n length
 var makeEmptyRow = function(n) {
   return _(_.range(n)).map(function() {
     return 0;
   });
 };
+//time complexity: linear
+
+
 
 window.findNRooksSolution = function(n) {
   // make a possible array of all indices using n - for loop
@@ -65,6 +71,8 @@ window.findNRooksSolution = function(n) {
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(board));
   return board;
 };
+//time complexity: exponential (nested n loops)
+
 
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
@@ -98,15 +106,19 @@ window.countNRooksSolutions = function(n) {
       //is i > rowsRemaining / 2
       var oddLastColumn = (rowsRemaining / 2) === (i - 1);
       var halfway = rowsRemaining / 2 < i;
-      //if all three are true
+      //if n is even & we're halfway through first row
       if (evenBoard && firstRow && halfway) {
         //double solutions
         solutionCount *= 2;
-        //return
+        //stop recursing
         return; 
+        //if we're about to start the middle col of first row  w/ an odd n
       } else if (firstRow && halfwayOdd) {
+        //double the current solution & continue
         solutionCount *= 2;
+        //if we've just finished the middle col of the first row w/ an odd n
       } else if (firstRow && oddLastColumn) {
+        //stop the loop
         return;
       }
       //reset current row to all zeros
@@ -131,6 +143,7 @@ window.countNRooksSolutions = function(n) {
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
+//time complexity: exponential (nested n loops)
 
 
 
@@ -144,7 +157,6 @@ window.findNQueensSolution = function(n) {
   
   // function([array of colIndices], rowIndex (n-1))      {
   var createBoard = function (arrayOfColIndices, rowsRemaining) {
-    debugger;
     // if rows < 0 { 
     if (rowsRemaining < 0) {
       //create board using matrix
@@ -188,6 +200,7 @@ window.findNQueensSolution = function(n) {
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
+//time complexity: exponential (nested n loops)
 
 
 
@@ -230,15 +243,19 @@ window.countNQueensSolutions = function(n) {
       //is i > rowsRemaining / 2
       var oddLastColumn = (rowsRemaining / 2) === (i - 1);
       var halfway = rowsRemaining / 2 < i;
-      //if all three are true
+      //if n is even & we're halfway through first row
       if (evenBoard && firstRow && halfway) {
         //double solutions
         solutionCount *= 2;
-        //return
+        //stop recursing
         return; 
+        //if we're about to start the middle col of first row  w/ an odd n
       } else if (firstRow && halfwayOdd) {
+        //double the current solution & continue
         solutionCount *= 2;
+        //if we've just finished the middle col of the first row w/ an odd n
       } else if (firstRow && oddLastColumn) {
+        //stop the loop
         return;
       }
       
@@ -266,4 +283,4 @@ window.countNQueensSolutions = function(n) {
 
 
 
-
+console.log(countNQueensSolutions(9));
