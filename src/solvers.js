@@ -20,6 +20,11 @@ var makeEmptyMatrix = function(n) {
   });
 };
 
+var makeEmptyRow = function(n) {
+  return _(_.range(n)).map(function() {
+    return 0;
+  });
+};
 
 window.findNRooksSolution = function(n) {
   // make a possible array of all indices using n - for loop
@@ -53,7 +58,6 @@ window.findNRooksSolution = function(n) {
     }
   };
   
-  
   // run function on (possiblesArray, n -1);
   createBoard(possibleI, n - 1);
 
@@ -69,11 +73,53 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; //fixme
+    // make a possible array of all indices using n - for loop
+  var possibleI = [...Array(n).keys()];
+  // make empty matrix
+  var board = makeEmptyMatrix(n);
+  
+  // function([array of colIndices], rowIndex (n-1))      {
+  var createBoard = function (arrayOfColIndices, rowsRemaining) {
+    // if rows < 0 { 
+    if (rowsRemaining < 0) {
+      solutionCount++;
+      //return out of func
+      return;
+    }
+    
+    // for loop (i = 0 ... i < rowIndex){
+    for (var i = 0; i < arrayOfColIndices.length; i++) {
+      var colIndex = arrayOfColIndices[i];
+      //in our nested array matrix,
+      //find row & column index
+        //set value to 1
+      board[rowsRemaining][colIndex] = 1;
+      
+      // function (possible (splice[i]), rows -1);
+      var updatedColIndices = arrayOfColIndices.slice();
+      updatedColIndices.splice(i, 1);
+      //recurse the function w/ new imputs
+      createBoard(updatedColIndices, (rowsRemaining - 1));
+      //reset current row to all zeros
+      board[rowsRemaining] = makeEmptyRow(n);
+      //reset prior row to all zeros
+      board[rowsRemaining + 1] = makeEmptyRow(n);
+    }
+  };
+  
+  // run function on (possiblesArray, n -1);
+  createBoard(possibleI, n - 1);
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
+
+
+
+
+
+
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
