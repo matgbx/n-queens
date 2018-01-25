@@ -86,6 +86,29 @@ window.countNRooksSolutions = function(n) {
     
     // for loop (i = 0 ... i < rowIndex){
     for (var i = 0; i < arrayOfColIndices.length; i++) {
+      
+      //to reduce speed, stop running the function when we're halfway through 
+      //the possibilities and double the count.
+      //is n even?
+      var evenBoard = n % 2 === 0;
+      //are we on the row we started on?
+      var firstRow = rowsRemaining === n - 1;
+      //is i === rowsRemaining / 2
+      var halfwayOdd = rowsRemaining / 2 === i;
+      //is i > rowsRemaining / 2
+      var oddLastColumn = (rowsRemaining / 2) === (i - 1);
+      var halfway = rowsRemaining / 2 < i;
+      //if all three are true
+      if (evenBoard && firstRow && halfway) {
+        //double solutions
+        solutionCount *= 2;
+        //return
+        return; 
+      } else if (firstRow && halfwayOdd) {
+        solutionCount *= 2;
+      } else if (firstRow && oddLastColumn) {
+        return;
+      }
       //reset current row to all zeros
       board[rowsRemaining] = makeEmptyRow(n);
       var colIndex = arrayOfColIndices[i];
@@ -111,10 +134,6 @@ window.countNRooksSolutions = function(n) {
 
 
 
-
-
-
-
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
   // make a possible array of all indices using n - for loop
@@ -128,7 +147,6 @@ window.findNQueensSolution = function(n) {
     debugger;
     // if rows < 0 { 
     if (rowsRemaining < 0) {
-      //debugger;
       //create board using matrix
       var testBoard = new Board(matrix);
       //test both diagonals on board
@@ -201,6 +219,29 @@ window.countNQueensSolutions = function(n) {
     }
     //iterate through available col indices
     for (var i = 0; i < colIndexArray.length; i++) {
+      //to reduce speed, stop running the function when we're halfway through 
+      //the possibilities and double the count.
+      //is n even?
+      var evenBoard = n % 2 === 0;
+      //are we on the row we started on?
+      var firstRow = rowsRemaining === n - 1;
+      //is i === rowsRemaining / 2
+      var halfwayOdd = rowsRemaining / 2 === i;
+      //is i > rowsRemaining / 2
+      var oddLastColumn = (rowsRemaining / 2) === (i - 1);
+      var halfway = rowsRemaining / 2 < i;
+      //if all three are true
+      if (evenBoard && firstRow && halfway) {
+        //double solutions
+        solutionCount *= 2;
+        //return
+        return; 
+      } else if (firstRow && halfwayOdd) {
+        solutionCount *= 2;
+      } else if (firstRow && oddLastColumn) {
+        return;
+      }
+      
       //clear the current row
       matrix[rowsRemaining] = makeEmptyRow();
       //make a variable for column index
