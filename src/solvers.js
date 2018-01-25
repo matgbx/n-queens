@@ -158,14 +158,12 @@ window.findNQueensSolution = function(n) {
       updatedColIndices.splice(i, 1);
       //recurse the function w/ new imputs
       
-      var foundSolution = createBoard(updatedColIndices, (rowsRemaining - 1))
+      var foundSolution = createBoard(updatedColIndices, (rowsRemaining - 1));
       if (foundSolution) {
         return foundSolution;
       }
-
     }
   };
-  
   // run function on (possiblesArray, n -1);
   createBoard(possibleI, n - 1);
 
@@ -180,7 +178,46 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0;
+  
+  //make an array of colIndex possibilities (0 -n)
+  var possibleI = [...Array(n).keys()];
+  //make an empty matrix
+  var matrix = makeEmptyMatrix(n);
+  
+  //make recursive function takes in two arguments: possible col indices & rows remaining
+  var findSolutions = function (colIndexArray, rowsRemaining) {
+    //base case! if num of rows < 0
+    if (rowsRemaining < 0) {
+      //transform matrix into board
+      var testBoard = new Board(matrix);
+      // create truth variable and test both diagonals
+      var truthTest = !testBoard.hasAnyMajorDiagonalConflicts() && !testBoard.hasAnyMinorDiagonalConflicts();
+      // if both pass, increase solution count
+      if (truthTest) {
+        solutionCount++;
+      }
+      return;
+    }
+    //iterate through available col indices
+    for (var i = 0; i < colIndexArray.length; i++) {
+      //clear the current row
+      matrix[rowsRemaining] = makeEmptyRow();
+      //make a variable for column index
+      var colIndex = colIndexArray[i];
+      //set matrix at row and column to 1
+      matrix[rowsRemaining][colIndex] = 1;
+      //copy possible column indices
+      var updatedColIndices = colIndexArray.slice();
+      //splice the column index used
+      updatedColIndices.splice(i, 1);
+      //recall the function with new colum index possibles and rows -1
+      findSolutions(updatedColIndices, rowsRemaining - 1);
+    }
+  };
+    
+  //call recursive function on array of col index & rows = n-1
+  findSolutions(possibleI, n - 1);
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
