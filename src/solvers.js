@@ -67,10 +67,6 @@ window.findNRooksSolution = function(n) {
 };
 
 
-
-
-
-
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0; //fixme
@@ -90,6 +86,8 @@ window.countNRooksSolutions = function(n) {
     
     // for loop (i = 0 ... i < rowIndex){
     for (var i = 0; i < arrayOfColIndices.length; i++) {
+      //reset current row to all zeros
+      board[rowsRemaining] = makeEmptyRow(n);
       var colIndex = arrayOfColIndices[i];
       //in our nested array matrix,
       //find row & column index
@@ -101,10 +99,6 @@ window.countNRooksSolutions = function(n) {
       updatedColIndices.splice(i, 1);
       //recurse the function w/ new imputs
       createBoard(updatedColIndices, (rowsRemaining - 1));
-      //reset current row to all zeros
-      board[rowsRemaining] = makeEmptyRow(n);
-      //reset prior row to all zeros
-      board[rowsRemaining + 1] = makeEmptyRow(n);
     }
   };
   
@@ -123,11 +117,66 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  // make a possible array of all indices using n - for loop
+  var possibleI = [...Array(n).keys()];
+  // make empty matrix
+  var matrix = makeEmptyMatrix(n);
+  var solution = matrix.slice();
+  
+  // function([array of colIndices], rowIndex (n-1))      {
+  var createBoard = function (arrayOfColIndices, rowsRemaining) {
+    debugger;
+    // if rows < 0 { 
+    if (rowsRemaining < 0) {
+      //debugger;
+      //create board using matrix
+      var testBoard = new Board(matrix);
+      //test both diagonals on board
+      var truthTest = !testBoard.hasAnyMajorDiagonalConflicts() && !testBoard.hasAnyMinorDiagonalConflicts();
+      
+      if (truthTest) {
+        //if both tests return false, it's a valid solution
+        solution = matrix.slice();
+      }
+      //return out of func
+      return truthTest;
+    }
+    
+    // for loop (i = 0 ... i < rowIndex){
+    for (var i = 0; i < arrayOfColIndices.length; i++) {
+      //reset current row to all zeros
+      matrix[rowsRemaining] = makeEmptyRow(n);
+
+      var colIndex = arrayOfColIndices[i];
+      //in our nested array matrix,
+      //find row & column index
+        //set value to 1
+      matrix[rowsRemaining][colIndex] = 1;
+      
+      // function (possible (splice[i]), rows -1);
+      var updatedColIndices = arrayOfColIndices.slice();
+      updatedColIndices.splice(i, 1);
+      //recurse the function w/ new imputs
+      
+      var foundSolution = createBoard(updatedColIndices, (rowsRemaining - 1))
+      if (foundSolution) {
+        return foundSolution;
+      }
+
+    }
+  };
+  
+  // run function on (possiblesArray, n -1);
+  createBoard(possibleI, n - 1);
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
+
+
+
+
+
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
@@ -136,3 +185,7 @@ window.countNQueensSolutions = function(n) {
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
+
+
+
+
